@@ -15,7 +15,7 @@ cartRouter.get('/', async (req,res) => {
 
 cartRouter.get('/:cid', async (req,res) => {
     try {
-        let cart = await cartModel.findById({_id:req.params.cid})
+        let cart = await cartModel.find({_id:req.params.cid})
         res.send({result:'succes', payload:cart})
     } catch (error) {
         res.status(400).json({error:'Carrito no encontrado'})
@@ -69,7 +69,26 @@ cartRouter.delete('/:cid/product/:pid', async (req,res)=>{
             return res.send({result:'error', error:'producto no encontrado'})
         }
 
-        
+        let deleteProduct = cart.products.findIndex(p => p.product._id.toString() === req.params.pid.toString() )
+        console.log(deleteProduct)
+
+        if(cart.products[deleteProduct].quantity > 1) {
+            cart.products[deleteProduct].quantity --
+        }else {
+            cart.products.splice(deleteProduct,1)     
+        }
+
+        let result = await cartModel.updateOne({_id:req.params.cid}, cart)
+        res.send({result:'succes', payload:result})
+
+    } catch (error) {
+        res.status(400).json({error:'Producto o carrito no encontrado'})
+    }
+})
+
+cartRouter.put('/:cid', async (req,res) => {
+    try {
+        let cart = await cartModel.findById({_id:req.params.cid})
     } catch (error) {
         
     }
