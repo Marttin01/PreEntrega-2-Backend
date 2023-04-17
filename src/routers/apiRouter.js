@@ -1,9 +1,10 @@
 import express,{ Router } from "express";
 import { productRouter } from "./productsRouter.js";
+import { cartRouter } from "./cartRouter.js";
 
 export const apiRouter = Router()
 apiRouter.use('/products', productRouter)
-// apiRouter.use('/carts', cartRouter)
+apiRouter.use('/carts', cartRouter)
 
 
 
