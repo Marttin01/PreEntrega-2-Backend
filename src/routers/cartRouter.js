@@ -87,9 +87,56 @@ cartRouter.delete('/:cid/product/:pid', async (req,res)=>{
 })
 
 cartRouter.put('/:cid', async (req,res) => {
+    // try {
+        // let cart = await cartModel.findById({_id:req.params.cid})
+        // if(!cart){
+        //     res.send({status:'error', error:'carrito no encontrado'})
+        // }else {
+        //     // cart.products = await productModel.paginate()
+        // }
+        // let result = await cartModel.updateOne({_id:req.params.cid}, cart)
+        // res.send({result:'succes', payload:result})
+    // } catch (error) {
+    //     res.status(400).json({error:'Carrito no encontrado o no actualizado'})
+    // }
+})
+
+cartRouter.put('/:cid/product/:pid', async (req,res) => {
+    try {
+        let cantidad = req.body.quantity 
+
+        let cart = await cartModel.findById({_id:req.params.cid})
+        if(!cart){
+            return res.send({status:'error', error:'carrito no encontrado'})
+        }
+
+        let newCart = cart.products.findIndex(p => p.product._id.toString() === req.params.pid.toString())
+        // console.log(newCart)
+        if(newCart != -1){
+            cart.products[newCart].quantity = cantidad
+        }
+        // console.log(cart)
+        let result = await cartModel.updateOne({_id:req.params.cid}, cart)
+
+        res.send({result:'succes', payload:result})
+
+    } catch (error) {
+        res.status(400).json({error:'Producto no actualizado'})
+    }
+})
+
+cartRouter.delete('/:cid', async (req,res) =>{
     try {
         let cart = await cartModel.findById({_id:req.params.cid})
+        if(!cart) {
+            res.send({result:'error',error:'carrito no encontrado'})
+        }else{
+            let cartLenght = cart.products.length
+            let eliminado = cart.products.splice(0,cartLenght)
+            let result = await cartModel.updateOne({_id:req.params.cid}, cart)
+            res.send({result:'succes', payload:result})
+        }
     } catch (error) {
-        
+        res.status(400).json({error:'carrito no encontrado'})
     }
 })
