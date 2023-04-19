@@ -88,10 +88,19 @@ cartRouter.delete('/:cid/product/:pid', async (req,res)=>{
 
 cartRouter.put('/:cid', async (req,res) => {
     // try {
-        // let cart = await cartModel.findById({_id:req.params.cid})
-        // if(!cart){
-        //     res.send({status:'error', error:'carrito no encontrado'})
-        // }else {
+        const optionPaginate = {
+            limit: req.query.limit ?? 5,
+            page: req.query.page ?? 1
+        }
+
+        let cart = await cartModel.findById({_id:req.params.cid})
+        if(!cart){
+            res.send({status:'error', error:'carrito no encontrado'})
+        }
+
+        const result = await cartModel.paginate({},optionPaginate)
+        res.send({result:'succes', payload:result})
+
         //     // cart.products = await productModel.paginate()
         // }
         // let result = await cartModel.updateOne({_id:req.params.cid}, cart)
