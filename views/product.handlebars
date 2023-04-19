@@ -1,0 +1,19 @@
+<h2>{{pageTitle}}</h2>
+
+{{#if hayProduct}}
+<ul style="list-style: none;">
+    {{#each product}}
+    <li>{{this.title}} </li>
+    {{!-- <h4>Descripcion</h4> --}}
+    <li>{{this.description}} </li> 
+    <li>{{this.status}} </li> 
+    <li>{{this.category}} </li> 
+    <li>{{this.thumbnail}} </li> 
+    <li>{{this.price}} </li> 
+    {{/each}}
+</ul>
+{{else}}
+<p>No hay datos</p>
+{{/if}}
+<button>Agregar al carrito</button>
+<a href="/products">Volver</a>

@@ -1,0 +1,14 @@
+<h2>Products</h2>
+
+{{#if hayArray}}
+<ul>
+    {{#each array}}
+    <li>{{this.title}}</li> <button>Agregar al carrito</button> <button><a href="/products/{{id}}">Detalles</a></button>
+    {{/each}}
+</ul>
+{{else}}
+<p>No hay productos</p>
+{{/if}}
+<a href="/products?limit={{limit}}&page={{prevPage}}">Prev</a>
+{{currentPage}}
+<a href="/products?limit={{limit}}&page={{nextPage}}">Next</a>
